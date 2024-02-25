@@ -1,8 +1,8 @@
 package rest.general;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import rest.entities.GraphAssumption;
 
 /**
@@ -15,13 +15,14 @@ public abstract class AbstractAssumptionNode {
 	private GraphAssumption assumption;
 	private List<AbstractAssumptionNode> subAssumptions;
 	private LogicalOperation logicalOperation;
+	private List<Boolean> subAssumptionResults;
 
 	/**
 	 * Constructs an AbstractAssumptionNode with the specified assumption,
 	 * sub-assumptions, and logical operation.
 	 *
 	 * @param assumption       The assumption associated with this node.
-	 * @param subAssumptions   The sub-assumptions (children) of this node.
+	 * @param subAssumptions   The sub-assumptions of this node.
 	 * @param logicalOperation The logical operation associated with this node.
 	 */
 	public AbstractAssumptionNode(GraphAssumption assumption, List<AbstractAssumptionNode> subAssumptions,
@@ -29,6 +30,7 @@ public abstract class AbstractAssumptionNode {
 		this.assumption = assumption;
 		this.subAssumptions = subAssumptions;
 		this.logicalOperation = logicalOperation;
+		this.subAssumptionResults = new ArrayList<>();
 	}
 
 	/**
@@ -42,7 +44,7 @@ public abstract class AbstractAssumptionNode {
 
 	/**
 	 * Returns an unmodifiable view of the sub-assumptions list.
-	 * 
+	 *
 	 * @return An unmodifiable view of the sub-assumptions list.
 	 */
 	public List<AbstractAssumptionNode> getSubAssumptions() {
@@ -59,12 +61,21 @@ public abstract class AbstractAssumptionNode {
 	}
 
 	/**
+	 * Adds a sub-assumption result to the list of sub-assumption results.
+	 *
+	 * @param result The result of a sub-assumption evaluation.
+	 */
+	public void addSubAssumptionResult(Boolean result) {
+		this.subAssumptionResults.add(result);
+	}
+
+	/**
 	 * Evaluates the assumption associated with this node based on the logical
 	 * operation and the list of sub-assumptions.
 	 *
 	 * @return true if the assumption holds, false otherwise.
 	 */
 	public boolean evaluate() {
-		return logicalOperation.evaluate(this.subAssumptions);
+		return logicalOperation.evaluate(this.subAssumptionResults);
 	}
 }

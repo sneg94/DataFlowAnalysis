@@ -40,7 +40,7 @@ import rest.entities.GraphAssumption;
  */
 public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer implements SecurityCheckAdapter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DataFlowAnalysisAdapter.class);
-	public static final String MODEL_PROJECT_NAME = "org.palladiosimulator.dataflow.confidentiality.analysis.testmodels";
+	private static final String MODEL_PROJECT_NAME = "org.palladiosimulator.dataflow.confidentiality.analysis.testmodels";
 	private DataFlowConfidentialityAnalysis analysis = null;
 	private String baseFolderName;
 	private String folderName;
@@ -143,7 +143,7 @@ public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer imple
 	 * This method considers sub-assumptions in the given scenario.
 	 */
 	@Override
-	protected void performScenarioEvaluation() {
+	public void performScenarioEvaluation() {
 		LOGGER.info("Evaluate given scenario.");
 		evaluateAssumptions(this.assumptions, false);
 		if (!this.anyAssumptionViolation) {
@@ -253,14 +253,17 @@ public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer imple
 	}
 
 	/**
-	 * Performs the evaluation of sub-assumptions scenarios for a given set of
+	 * Performs the evaluation of sub-assumption scenarios for a given set of
 	 * assumptions. Prints information about violations, if any, to the console.
 	 *
 	 * @param subAssumptions A list of sub-assumptions to be evaluated.
-	 * @param parentIndex    The index of the parent assumption.
+	 * @param isParent       A flag indicating whether the assumptions are related
+	 *                       to parent assumptions. This should always be true as
+	 *                       this method specifically evaluates sub-assumptions.
+	 * @return true if any sub-assumption violation is found, false otherwise.
 	 */
 	@Override
-	protected boolean performSubAssumptionEvaluation(List<GraphAssumption> subAssumptions, boolean isParent) {
+	public boolean performSubAssumptionEvaluation(List<GraphAssumption> subAssumptions, boolean isParent) {
 		LOGGER.info("Evaluate given sub-assumptions scenarios.");
 		boolean isSubAssumptionViolated = evaluateAssumptions(subAssumptions, true);
 		LOGGER.info("Finished evaluating the sub-assumption scenario.");
@@ -310,10 +313,6 @@ public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer imple
 	private void resetEvaluationState() {
 		anyAssumptionViolation = false;
 		System.out.flush();
-	}
-
-	public int getSubAssumptionViolationCount() {
-		return violatedSubAssumptions.size();
 	}
 
 	/**

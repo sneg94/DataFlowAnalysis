@@ -4,17 +4,20 @@ package rest.general;
  * The AbstractAssumptionTree class represents an abstract tree structure of
  * assumptions and sub-assumptions.
  */
-public abstract class AbstractAssumptionTree {
-
+public abstract class AbstractAssumptionTree implements TreeSubAssumptionEvaluator {
 	private AbstractAssumptionNode root;
+	private TreeSubAssumptionEvaluator treeSubAssumptionEvaluator;
 
 	/**
 	 * Constructs an AbstractAssumptionTree with the specified root node.
 	 *
-	 * @param root The root node of the tree.
+	 * @param root                       The root node of the tree.
+	 * @param treeSubAssumptionEvaluator The evaluator for sub-assumptions in the
+	 *                                   tree.
 	 */
-	public AbstractAssumptionTree(AbstractAssumptionNode root) {
+	public AbstractAssumptionTree(AbstractAssumptionNode root, TreeSubAssumptionEvaluator treeSubAssumptionEvaluator) {
 		this.root = root;
+		this.treeSubAssumptionEvaluator = treeSubAssumptionEvaluator;
 	}
 
 	/**

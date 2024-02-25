@@ -11,14 +11,13 @@ import rest.entities.GraphAssumption;
  * must provide specific implementations for the analysis logic.
  */
 public abstract class AbstractSubAssumptionAnalyzer {
-
 	protected Collection<GraphAssumption> assumptions;
 
 	/**
 	 * Performs the evaluation of the given scenario by analyzing data flows against
 	 * assumptions. This method considers sub-assumptions in the given scenario.
 	 */
-	protected void performScenarioEvaluation() {
+	public void performScenarioEvaluation() {
 		evaluateAssumptions(this.assumptions, false);
 	};
 
@@ -35,13 +34,16 @@ public abstract class AbstractSubAssumptionAnalyzer {
 	public abstract boolean evaluateAssumptions(Collection<GraphAssumption> currAssumptions, boolean isParent);
 
 	/**
-	 * Performs the evaluation of sub-assumptions scenarios for a given set of
+	 * Performs the evaluation of sub-assumption scenarios for a given set of
 	 * assumptions.
 	 *
 	 * @param subAssumptions A list of sub-assumptions to be evaluated.
-	 * @param parentIndex    The index of the parent assumption.
+	 * @param isParent       A flag indicating whether the assumptions are related
+	 *                       to parent assumptions. This should always be true as
+	 *                       this method specifically evaluates sub-assumptions.
+	 * @return true if any sub-assumption violation is found, false otherwise.
 	 */
-	protected boolean performSubAssumptionEvaluation(List<GraphAssumption> subAssumptions, boolean isParent) {
+	public boolean performSubAssumptionEvaluation(List<GraphAssumption> subAssumptions, boolean isParent) {
 		return evaluateAssumptions(subAssumptions, isParent);
 	}
 
@@ -53,7 +55,7 @@ public abstract class AbstractSubAssumptionAnalyzer {
 	 *                   retrieved.
 	 * @return A list of sub-assumptions.
 	 */
-	protected List<GraphAssumption> getSubAssumptions(GraphAssumption assumption) {
+	public List<GraphAssumption> getSubAssumptions(GraphAssumption assumption) {
 		return this.assumptions.stream()
 				.filter(currAssumption -> assumption.getDependencies().contains(currAssumption.getId()))
 				.collect(Collectors.toList());
@@ -67,7 +69,7 @@ public abstract class AbstractSubAssumptionAnalyzer {
 	 * @return {@code true} if the assumption is present in the dependencies of any
 	 *         existing assumption, otherwise {@code false}.
 	 */
-	protected boolean isAssumptionInDependencies(GraphAssumption assumption) {
+	public boolean isAssumptionInDependencies(GraphAssumption assumption) {
 		return this.assumptions.stream()
 				.anyMatch(currAssumption -> currAssumption.getDependencies().contains(assumption.getId()));
 	}
@@ -81,7 +83,7 @@ public abstract class AbstractSubAssumptionAnalyzer {
 	 *                                 evaluated.
 	 * @return True if the assumption has been evaluated; false otherwise.
 	 */
-	protected boolean hasMatch(GraphAssumption assumption, List<GraphAssumption> alreadyPassedAssumptions) {
+	public boolean hasMatch(GraphAssumption assumption, List<GraphAssumption> alreadyPassedAssumptions) {
 		for (GraphAssumption curr : alreadyPassedAssumptions) {
 			if (curr.getId().equals(assumption.getId())) {
 				return true;
