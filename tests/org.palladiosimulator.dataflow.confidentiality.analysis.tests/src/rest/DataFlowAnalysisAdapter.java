@@ -47,7 +47,6 @@ public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer imple
 	private String filesName;
 	private String scenarioName;
 	private boolean anyAssumptionViolation = false;
-	private List<GraphAssumption> violatedSubAssumptions;
 
 	/**
 	 * Initializes the adapter for analysis based on the provided
@@ -68,7 +67,6 @@ public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer imple
 		String modelName = modelPath.substring(lastSeparatorIndex + 1);
 
 		this.assumptions = analysisParameter.assumptions();
-		this.violatedSubAssumptions = new ArrayList<GraphAssumption>();
 		this.baseFolderName = "casestudies/CaseStudy-" + modelName;
 		this.folderName = modelName;
 		this.filesName = "default";
@@ -133,7 +131,6 @@ public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer imple
 		}
 
 		outputStringBuilder.append("\n#########################################################");
-
 		return new AnalysisOutput(outputStringBuilder.toString(), this.assumptions);
 	}
 
@@ -181,6 +178,7 @@ public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer imple
 				assumption.setProbabilityOfViolation(1.0);
 			}
 		}
+
 		return isAnyViolation;
 	}
 
@@ -332,6 +330,35 @@ public class DataFlowAnalysisAdapter extends AbstractSubAssumptionAnalyzer imple
 
 		String fullIndex = String.valueOf(sequenceIndex);
 		System.out.println(DataFlowAnalysisAdapter.formatDataFlow(fullIndex, new PCMActionSequence(violations), true));
+	}
+
+	/**
+	 * Sets the data flow analysis.
+	 *
+	 * @param analysis A DataFlowConfidentialityAnalysis representing the analysis
+	 *                 to be set.
+	 */
+	public void setDataFlowAnalysis(DataFlowConfidentialityAnalysis analysis) {
+		this.analysis = analysis;
+	}
+
+	/**
+	 * Checks if there is any violation of assumptions.
+	 *
+	 * @return true if there is any violation of assumptions, otherwise false.
+	 */
+	public boolean getIsAnyViolation() {
+		return this.anyAssumptionViolation;
+	}
+
+	/**
+	 * Sets the assumptions for the graph.
+	 *
+	 * @param assumptions A collection of GraphAssumptions representing the
+	 *                    assumptions to be set.
+	 */
+	public void setAssumptions(Collection<GraphAssumption> assumptions) {
+		this.assumptions = assumptions;
 	}
 
 	/**

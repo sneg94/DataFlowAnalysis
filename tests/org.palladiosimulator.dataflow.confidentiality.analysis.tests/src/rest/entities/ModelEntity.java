@@ -136,4 +136,8 @@ public class ModelEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public void setModelEntity(String id) {
+		this.id = id;
+	}
 }
